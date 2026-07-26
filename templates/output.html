@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>Output | StrokeFlow</title>
+    <style>
+        body { 
+            font-family: 'Bricolage Grotesque', sans-serif; 
+            background-color: #F4F3EF;
+            background-image: radial-gradient(#000000 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+        }
+        .font-mono { font-family: 'Space Mono', monospace; }
+        .shadow-brutal { box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); }
+        .shadow-brutal-sm { box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
+        .shadow-brutal-hover:hover { 
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
+            transform: translate(6px, 6px);
+        }
+        
+        /* Brutalist Checkerboard to imply transparency */
+        .bg-checker {
+            background-color: #F4F3EF;
+            background-image: 
+                linear-gradient(45deg, #e5e5e5 25%, transparent 25%), 
+                linear-gradient(-45deg, #e5e5e5 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #e5e5e5 75%), 
+                linear-gradient(-45deg, transparent 75%, #e5e5e5 75%);
+            background-size: 24px 24px;
+            background-position: 0 0, 0 12px, 12px -12px, -12px 0px;
+        }
+    </style>
+</head>
+
+<body class="text-black min-h-screen selection:bg-[#CCFF00] selection:text-black pb-20">
+
+
+    <nav class="sticky top-0 z-50 bg-[#F4F3EF] border-b-2 border-black">
+        <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+            
+            <a href="/" class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-black flex items-center justify-center rounded-sm">
+                    <svg class="w-5 h-5 text-[#CCFF00]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                </div>
+                <span class="text-lg sm:text-xl md:text-2xl font-black uppercase whitespace-nowrap">StrokeFlow</span>
+            </a>
+
+            
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 pt-12">
+        <header class="mb-10">
+            <div class="inline-block border-2 border-black bg-white px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest mb-4 shadow-brutal-sm rounded-sm">
+                Result
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tighter">
+                SIGNATURE DIGITIZED
+            </h1>
+        </header>
+
+        <div class="grid lg:grid-cols-12 gap-10">
+            
+            
+            <div class="lg:col-span-8">
+                <div class="bg-white border-2 border-black p-4 shadow-brutal rounded-sm h-[600px] flex flex-col">
+                    <div class="flex justify-between items-center border-b-2 border-black pb-3 mb-4">
+                        <div class="flex gap-2">
+                            <div class="w-4 h-4 rounded-full bg-black"></div>
+                            <div class="w-4 h-4 rounded-full border-2 border-black"></div>
+                            <div class="w-4 h-4 rounded-full bg-gray-300 border-2 border-black"></div>
+                        </div>
+                        <div class="font-mono text-xs font-bold uppercase">Render_Preview.exe</div>
+                    </div>
+
+               
+                    <div class="flex-1 bg-checker border-2 border-black flex items-center justify-center relative overflow-hidden p-6">
+                        <img src="{{ url_for('static', filename='uploads/' + pngFile) }}" alt="Processed Signature" class="max-w-full max-h-full object-contain relative z-10 drop-shadow-xl">
+                    </div>
+                </div>
+            </div>
+
+        
+            <div class="lg:col-span-4 flex flex-col gap-6">
+                
+             
+                <div class="bg-white border-2 border-black shadow-brutal rounded-sm p-6">
+                    <h2 class="text-2xl font-black uppercase border-b-2 border-black pb-4 mb-4">Asset Data</h2>
+                    
+                    <ul class="font-mono text-sm font-bold uppercase space-y-4">
+                        <li class="flex justify-between items-center">
+                            <span class="text-gray-500">File Name</span>
+                            <span class="truncate max-w-[150px]">{{ pngFile }}</span>
+                        </li>
+                        <li class="flex justify-between items-center">
+                            <span class="text-gray-500">Dimensions</span>
+                            <span>{{ width }} × {{ height }} px</span>
+                        </li>
+                        <li class="flex justify-between items-center">
+                            <span class="text-gray-500">Size (PNG)</span>
+                            <span class="bg-[#CCFF00] px-2 py-1 border-2 border-black text-xs">{{ pngSize }} KB</span>
+                        </li>
+                        <li class="flex justify-between items-center">
+                            <span class="text-gray-500">Size (SVG)</span>
+                            <span class="bg-black text-white px-2 py-1 border-2 border-black text-xs">{{ svgSize }} KB</span>
+                        </li>
+                    </ul>
+                </div>
+
+               
+                <div class="flex flex-col gap-4 mt-auto">
+                    
+                    <button onclick="copySVG()" class="w-full bg-white text-black border-2 border-black px-6 py-4 shadow-brutal-sm transition-all shadow-brutal-hover rounded-sm flex justify-between items-center group">
+                        <span class="text-lg font-black uppercase tracking-tight">Copy SVG Code</span>
+                        <div class="w-8 h-8 bg-gray-200 border-2 border-black flex items-center justify-center rounded-sm group-hover:bg-black group-hover:text-white transition-colors">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        </div>
+                    </button>
+
+                    
+                    <a href="{{ url_for('static', filename='uploads/' + pngFile) }}" download="{{ pngFile }}" class="w-full bg-black text-[#CCFF00] border-2 border-black px-6 py-4 shadow-brutal-sm transition-all shadow-brutal-hover rounded-sm flex justify-between items-center group">
+                        <span class="text-lg font-black uppercase tracking-tight">Download .PNG</span>
+                        <div class="w-8 h-8 bg-black border-2 border-[#CCFF00] flex items-center justify-center rounded-sm group-hover:-translate-y-1 transition-transform">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        </div>
+                    </a>
+
+                    
+                    <a href="{{ url_for('static', filename='uploads/' + svgFile) }}" download="{{ svgFile }}" class="w-full bg-[#CCFF00] text-black border-2 border-black px-6 py-5 shadow-brutal transition-all shadow-brutal-hover rounded-sm flex justify-between items-center group">
+                        <span class="text-2xl font-black uppercase tracking-tight">Download .SVG</span>
+                        <div class="w-10 h-10 bg-black text-[#CCFF00] border-2 border-black flex items-center justify-center rounded-sm group-hover:-translate-y-1 transition-transform">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        </div>
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+    <script>
+        async function copySVG(){
+        
+            const response = await fetch(
+                "{{ url_for('static', filename='uploads/' + svgFile) }}"
+            );
+        
+            const svg = await response.text();
+        
+            await navigator.clipboard.writeText(svg);
+        
+            alert("SVG copied to clipboard!");
+        }
+        </script>
+</body>
+
+</html>

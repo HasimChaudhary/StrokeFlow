@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>Connect | StrokeFlow</title>
+    <style>
+        body { 
+            font-family: 'Bricolage Grotesque', sans-serif; 
+            background-color: #F4F3EF;
+            background-image: radial-gradient(#000000 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+        }
+        .font-mono { font-family: 'Space Mono', monospace; }
+        .shadow-brutal { box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); }
+        .shadow-brutal-sm { box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
+        .shadow-brutal-hover:hover { 
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
+            transform: translate(6px, 6px);
+        }
+        
+        /* Forces the widget to fill available width but respects parent height */
+        .sk-ww-linkedin-profile-post {
+            width: 100% !important;
+            background: #F4F3EF;
+        }
+
+        /* Custom Brutalist Scrollbar for the feed container */
+        .scrollbar-brutal::-webkit-scrollbar {
+            width: 12px;
+            border-left: 2px solid #000;
+        }
+        .scrollbar-brutal::-webkit-scrollbar-track {
+            background: #F4F3EF;
+        }
+        .scrollbar-brutal::-webkit-scrollbar-thumb {
+            background: #CCFF00;
+            border: 2px solid #000;
+            border-right: none;
+        }
+        .scrollbar-brutal::-webkit-scrollbar-thumb:hover {
+            background: #000;
+        }
+    </style>
+</head>
+
+<body class="text-black min-h-screen selection:bg-[#CCFF00] selection:text-black pb-20">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-[#F4F3EF] border-b-2 border-black">
+        <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+            
+            <!-- Logo -->
+            <a href="/" class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-black flex items-center justify-center rounded-sm">
+                    <svg class="w-5 h-5 text-[#CCFF00]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                </div>
+                <span class="text-lg sm:text-xl md:text-2xl font-black uppercase whitespace-nowrap">StrokeFlow</span>
+            </a>
+
+            <!-- Desktop Menu (Hidden on mobile) -->
+            <div class="hidden md:flex items-center gap-8 font-mono text-sm font-bold uppercase tracking-wider">
+                <a href="/" class="hover:underline underline-offset-4 decoration-2">Home</a>
+                <a href="/compare" class="hover:underline underline-offset-4 decoration-2">Compare</a>
+               
+            </div>
+
+            <!-- Mobile Hamburger Button (Hidden on desktop) -->
+            <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center p-2 bg-[#CCFF00] border-2 border-black shadow-brutal-sm rounded-sm hover:translate-y-1 hover:translate-x-1 hover:shadow-none transition-all cursor-pointer">
+                <svg class="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown (Hidden by default) -->
+        <div id="mobile-menu" class="hidden border-t-2 border-black bg-white flex-col font-mono text-sm font-bold uppercase tracking-wider md:hidden">
+            <a href="/" class="block px-6 py-4 border-b-2 border-black hover:bg-[#CCFF00] transition-colors">Home</a>
+            <a href="/compare" class="block px-6 py-4 border-b-2 border-black hover:bg-[#CCFF00] transition-colors">Compare</a>
+           
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 pt-12">
+        <header class="mb-10">
+            <div class="inline-block border-2 border-black bg-white px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest mb-4 shadow-brutal-sm rounded-sm">
+                Network
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tighter">
+                Developer's Socials
+            </h1>
+        </header>
+
+        <div class="grid lg:grid-cols-12 gap-10">
+            
+            <!-- Left: LinkedIn Widget Container -->
+            <div class="lg:col-span-8">
+                <!-- Fixed height applied here (h-[650px]) -->
+                <div class="bg-white border-2 border-black p-4 shadow-brutal rounded-sm h-[650px] flex flex-col">
+                    
+                    <!-- Window Controls -->
+                    <div class="flex justify-between items-center border-b-2 border-black pb-3 mb-4 shrink-0">
+                        <div class="flex gap-2">
+                            <div class="w-4 h-4 rounded-full bg-black"></div>
+                            <div class="w-4 h-4 rounded-full border-2 border-black"></div>
+                            <div class="w-4 h-4 rounded-full bg-[#CCFF00] border-2 border-black"></div>
+                        </div>
+                        <div class="font-mono text-xs font-bold uppercase">LinkedIn_Feed.exe</div>
+                    </div>
+
+                    <!-- SociableKit Embed Wrapper (Scrollable area) -->
+                    <div class="flex-1 bg-[#F4F3EF] border-2 border-black relative overflow-y-auto overflow-x-hidden p-2 scrollbar-brutal">
+                        <div class="sk-ww-linkedin-profile-post" data-embed-id="25700207"></div>
+                        <script src="https://widgets.sociablekit.com/linkedin-profile-posts/widget.js" defer></script>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Action Panel -->
+            <div class="lg:col-span-4 flex flex-col gap-8">
+                
+                <!-- Status Box -->
+                <div class="bg-white border-2 border-black shadow-brutal rounded-sm p-6">
+                    <h2 class="text-2xl font-black uppercase border-b-2 border-black pb-4 mb-4">Profile</h2>
+                    
+                    <ul class="font-mono text-sm font-bold uppercase space-y-4">
+                        <li class="flex justify-between items-center">
+                            <span class="text-gray-500">Status</span>
+                            <span class="bg-[#CCFF00] px-2 py-1 border-2 border-black text-xs">Online</span>
+                        </li>
+                        <li class="flex justify-between items-center">
+                            <span class="text-gray-500">Domain</span>
+                            <span>Data Science / BSc</span>
+                        </li>
+                        <li class="flex justify-between items-center">
+                            <span class="text-gray-500">Location</span>
+                            <span>Bhiwandi, IN</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Info Box -->
+                <div class="bg-black text-white border-2 border-black shadow-brutal rounded-sm p-6 relative overflow-hidden -mt-2">
+                    <h3 class="font-mono text-lg font-black uppercase mb-2 text-[#CCFF00]">System Message</h3>
+                    <p class="font-mono text-sm font-bold leading-relaxed opacity-90">
+                        Creator of StrokeFlow—an OpenCV-based handwritten signature digitization platform. Exploring Computer Vision, Image Processing, Machine Learning, and modern web development to build impactful AI products.
+                    </p>
+                </div>
+
+                <!-- Direct Connect Button -->
+                <a href="https://in.linkedin.com/in/hasimchaudhary" target="_blank" class="w-full bg-[#CCFF00] text-black border-2 border-black px-6 py-6 shadow-brutal transition-all shadow-brutal-hover rounded-sm flex justify-between items-center group cursor-pointer">
+                    <span class="text-2xl font-black uppercase tracking-tight">Connect LinkedIn</span>
+                    <div class="w-10 h-10 bg-black text-[#CCFF00] border-2 border-black flex items-center justify-center rounded-sm group-hover:scale-110 transition-transform">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                    </div>
+                </a>
+
+                <a href="https://github.com/HasimChaudhary" target="_blank" class="w-full bg-[#CCFF00] text-black border-2 border-black px-6 py-6 shadow-brutal transition-all shadow-brutal-hover rounded-sm flex justify-between items-center group cursor-pointer">
+                    <span class="text-2xl font-black uppercase tracking-tight">Connect Github</span>
+                    <div class="w-10 h-10 bg-black text-[#CCFF00] border-2 border-black flex items-center justify-center rounded-sm group-hover:scale-110 transition-transform">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </main>
+    <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+        });
+    </script>
+</body>
+</html>

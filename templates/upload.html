@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>Upload | StrokeFlow</title>
+    <style>
+        body { 
+            font-family: 'Bricolage Grotesque', sans-serif; 
+            background-color: #F4F3EF;
+            background-image: radial-gradient(#000000 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+        }
+        .font-mono { font-family: 'Space Mono', monospace; }
+        
+        /* Brutalist hard shadows */
+        .shadow-brutal { box-shadow: 8px 8px 0px 0px rgba(0,0,0,1); }
+        .shadow-brutal-sm { box-shadow: 4px 4px 0px 0px rgba(0,0,0,1); }
+        .shadow-brutal-hover:hover { 
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1); 
+            transform: translate(6px, 6px);
+        }
+        
+        /* Custom dashed border for the dropzone */
+        .border-dashed-thick {
+            background-image: repeating-linear-gradient(0deg, #000, #000 12px, transparent 12px, transparent 24px, #000 24px), repeating-linear-gradient(90deg, #000, #000 12px, transparent 12px, transparent 24px, #000 24px), repeating-linear-gradient(180deg, #000, #000 12px, transparent 12px, transparent 24px, #000 24px), repeating-linear-gradient(270deg, #000, #000 12px, transparent 12px, transparent 24px, #000 24px);
+            background-size: 4px 100%, 100% 4px, 4px 100% , 100% 4px;
+            background-position: 0 0, 0 0, 100% 0, 0 100%;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+
+<body class="text-black min-h-screen selection:bg-[#CCFF00] selection:text-black pb-20">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-[#F4F3EF] border-b-2 border-black">
+        <div class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+            
+            <a href="/" class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-black flex items-center justify-center rounded-sm">
+                    <svg class="w-5 h-5 text-[#CCFF00]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                </div>
+                <span class="text-lg sm:text-xl md:text-2xl font-black uppercase whitespace-nowrap">StrokeFlow</span>
+            </a>
+
+           
+    </nav>
+
+    <!-- Main Workspace -->
+    <main class="max-w-7xl mx-auto px-6 pt-12">
+        
+        <header class="mb-10">
+            <div class="inline-block border-2 border-black bg-white px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest mb-4 shadow-brutal-sm rounded-sm">
+                Upload
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tighter">
+                Import Signature
+            </h1>
+        </header>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+        <div class="grid lg:grid-cols-12 gap-10">
+            
+            <!-- Left: Dropzone / Preview Area -->
+         
+            <div class="lg:col-span-8">
+                <div class="bg-white border-2 border-black p-4 shadow-brutal rounded-sm h-[600px] flex flex-col relative">
+                    
+                    <!-- Window Controls -->
+                    <div class="flex justify-between items-center border-b-2 border-black pb-3 mb-4 shrink-0">
+                        <div class="flex gap-2">
+                            <div class="w-4 h-4 rounded-full bg-black"></div>
+                            <div class="w-4 h-4 rounded-full border-2 border-black"></div>
+                            <div class="w-4 h-4 rounded-full bg-gray-300 border-2 border-black"></div>
+                        </div>
+                        <div class="font-mono text-xs font-bold uppercase">Canvas_Preview.exe</div>
+                    </div>
+
+                    <!-- Interactive Drag & Drop Area -->
+                    {% if image %}
+
+<div class="flex-1 flex items-center justify-center bg-[#F4F3EF] border-2 border-black">
+
+    <img
+        src="{{ url_for('static', filename='uploads/' + image) }}"
+        class="max-w-full max-h-full object-contain p-4"
+    >
+
+</div>
+
+{% else %}
+
+
+<div id="previewContainer"
+     class="flex-1 border-dashed-thick bg-[#F4F3EF] flex flex-col items-center justify-center relative overflow-hidden">
+
+    <input
+        type="file"
+        name="signature"
+        id="signature"
+        class="hidden"
+        accept="image/png,image/jpeg"
+        required
+    >
+
+    <!-- Preview Image -->
+    <img
+        id="previewImage"
+        class="hidden absolute inset-0 w-full h-full object-contain p-4 bg-[#F4F3EF]"
+    >
+
+    <label
+        for="signature"
+        id="uploadUI"
+        class="w-full h-full flex flex-col items-center justify-center cursor-pointer hover:bg-[#CCFF00] transition-colors duration-300">
+
+        <div class="w-20 h-20 mb-6 bg-white border-2 border-black flex items-center justify-center shadow-brutal-sm">
+            📄
+        </div>
+
+        <h3 class="text-3xl font-black uppercase tracking-tight mb-3">
+            Drag & Drop Signature
+        </h3>
+
+        <p id="filename" class="font-mono text-sm mb-5">
+            No file selected
+        </p>
+
+        <div class="bg-black text-white px-6 py-2 font-mono text-sm uppercase font-bold border-2 border-black">
+            Browse Local Files
+        </div>
+
+    </label>
+
+</div>
+
+{% endif %}
+
+
+                </div>
+            </div>
+
+            <!-- Right: Action Panel -->
+            <div class="lg:col-span-4 flex flex-col gap-8">
+                
+                <!-- Status Box -->
+                <div class="bg-white border-2 border-black shadow-brutal rounded-sm p-6">
+                    <h2 class="text-2xl font-black uppercase border-b-2 border-black pb-4 mb-4">Properties</h2>
+                    
+                    <ul class="font-mono text-sm font-bold uppercase space-y-4">
+                        <li class="flex justify-between items-center">
+                            <span class="text-gray-500">Status</span>
+                            <span class="bg-gray-200 px-2 py-1 border-2 border-black text-xs">Awaiting Input</span>
+                        </li>
+                        <li class="flex justify-between items-center">
+                            <span class="text-gray-500">Format</span>
+                            <span>PNG / JPG / PDF</span>
+                        </li>
+                        <li class="flex justify-between items-center">
+                            <span class="text-gray-500">Max Size</span>
+                            <span>10.0 MB</span>
+                        </li>
+                        <li class="flex justify-between items-center">
+                            <span class="text-gray-500">Contrast</span>
+                            <span>Auto-Detect</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Info Box -->
+                <div class="bg-[#CCFF00] border-2 border-black shadow-brutal rounded-sm p-6 relative overflow-hidden">
+                    <svg class="absolute -right-4 -bottom-4 w-24 h-24 text-black opacity-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 3.83L18.17 20H5.83L12 5.83zM11 16h2v2h-2v-2zm0-7h2v5h-2V9z"/></svg>
+                    <h3 class="font-mono text-lg font-black uppercase mb-2 relative z-10">Pro Tip</h3>
+                    <p class="font-mono text-sm font-bold text-gray-800 leading-relaxed relative z-10">
+                        For best vector extraction results, ensure the signature is photographed on plain, unlined paper with decent lighting.
+                    </p>
+                </div>
+
+                <!-- Proceed Button (Inactive State by default, but styled ready for click) -->
+                <button type="submit" class="w-full mt-auto bg-black text-[#CCFF00] border-2 border-black px-6 py-6 shadow-brutal transition-all shadow-brutal-hover rounded-sm flex justify-between items-center group">
+                    <span class="text-2xl font-black uppercase tracking-tight">Proceed</span>
+                    <div class="w-10 h-10 bg-[#CCFF00] text-black border-2 border-black flex items-center justify-center rounded-sm group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </div>
+                </button>
+
+            </div>
+        </div>
+    </form>
+    </main>
+    
+
+</body>
+
+<script>
+    const input = document.getElementById("signature");
+    const previewImage = document.getElementById("previewImage");
+    const uploadUI = document.getElementById("uploadUI");
+    const filename = document.getElementById("filename");
+    
+    if (input) {
+    
+        input.addEventListener("change", function () {
+    
+            if (this.files.length === 0) return;
+    
+            const file = this.files[0];
+    
+            filename.textContent = file.name;
+    
+            const reader = new FileReader();
+    
+            reader.onload = function (e) {
+    
+                previewImage.src = e.target.result;
+                previewImage.classList.remove("hidden");
+    
+                // Hide upload text after selecting a file
+                uploadUI.classList.add("hidden");
+    
+            };
+    
+            reader.readAsDataURL(file);
+    
+        });
+    
+    }
+    </script>
+</html>
